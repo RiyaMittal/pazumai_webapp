@@ -1,5 +1,6 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, session, redirect
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.utils import secure_filename
 import json
 from datetime import datetime
 
@@ -7,6 +8,7 @@ local_server = True
 
 app = Flask(__name__)
 
+app.secret_key = "super-secret-key"
 with open('config.json', 'r') as c:
     params = json.load(c)['params']
 
@@ -16,6 +18,7 @@ if local_server:
     app.config['SQLALCHEMY_DATABASE_URI'] = params['local_uri']  # mysql+pymysql://root:@localhost/coding_finale'
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = params['prod_uri']
+
 
 db = SQLAlchemy(app)
 
@@ -67,6 +70,28 @@ def contact():
 
     return render_template('contact.html', params=params)
 
+@app.route("/dashboard", methods=['GET', 'POST'])
+def dashboard():
+    # session.popitem()
+    if 'user' in session and session['user'] == params['admin_user']:
+
+        return render_template('dashboard.html', params=params)
+
+    if request.method == 'POST':
+        username = request.form.get('uname')
+        userpass = request.form.get('pass')
+
+        if (userpass == params['admin_user'] and userpass == params['admin_password']):
+            session['user'] = username
+
+            return render_template('dashboard.html', params=params)
+
+    return render_template('login.html', params=params)
+
+@app.route("/logout")
+def logout():
+    session.pop('user')
+    return redirect('/dashboard')
 
 
 app.run(debug=True)
