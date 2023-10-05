@@ -610,6 +610,24 @@ h1,h2,h3,h4,h5,h6 {
 .product-item .rating iconify-icon {
   color: #FFC43F;
 }
+.contact-details-row {
+  background-color: #f7f7f7;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Style for the Icons */
+.contact-icon {
+  font-size: 24px;
+  margin-bottom: 10px;
+  color: #333; /* Change the icon color as needed */
+}
+
+/* Style for the Contact Information */
+.contact-info {
+  font-size: 16px;
+  margin-bottom: 20px;
+}
 .product-item .price {
   display: block;
   width: 100%;
@@ -697,6 +715,15 @@ h1,h2,h3,h4,h5,h6 {
     right: 0;
     top: 21px;
   }
+  .dropdown:hover>.dropdown-menu {
+  display: block;
+}
+
+.dropdown>.dropdown-toggle:active {
+  /*Without this, clicking will make it sticky*/
+    pointer-events: none;
+}
+
 }
 
 /* single product */
